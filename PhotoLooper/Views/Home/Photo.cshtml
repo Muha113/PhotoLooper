@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewData["Title"] = "Photo";
+    Layout = "_Layout";
+}
+
+@model PostCollector
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta id="viewport" name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+    <style>
+        /*#testim {
+            top: 100px; 
+            left: 100px; 
+            bottom: 0; right: 0;
+        }*/
+    </style>
+</head>
+
+<body>
+    @*<section class="main clearfix">*@
+<form asp-action="TypeComment" asp-controller="Home" method="post">
+    <div class="main clearfix position-relative">
+        <div class="work">
+            <img src=@Model.Post.Path class="media" alt="" />
+            @*<img src="~/images/work1.jpg" class="media" alt="" />*@
+            <div class="caption">
+                <div class="work_title">
+                    <h1></h1>
+                </div>
+            </div>
+        </div>
+        <div class="row-space">
+            <div class="wrap-input100 position-relative">
+                <input type="text" size="40" name="com" />
+                <input type="hidden" name="pId" value=@Model.Post.Id />
+                <input type="submit" icon="~/images/send.ico" />
+            </div>
+            @if (Model.Comments.Count != 0)
+            {
+                @foreach (var x in Model.Comments)
+                {
+                    <div>
+                        <span>Comment : </span>
+                        <a>@x.comment</a>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</form>
+    @*</section>*@<!-- end main -->
+</body>
+</html>
+

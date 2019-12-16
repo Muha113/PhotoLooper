@@ -1,0 +1,28 @@
+﻿@using PhotoLooper
+@{
+    ViewData["Title"] = "Tape";
+    Layout = "_Layout";
+}
+
+@model IEnumerable<PostCollector>
+
+<section class="main clearfix">
+    @if (Model.Count() != 0)
+        {
+        <div class="row-space">
+            @foreach (var x in Model)
+             {
+                <div class="col-2">
+                    <div>
+                        <a href="~/Home/Photo?selected=@x.Post.Id">
+                            <img src=@x.Post.Path width="300" height="350" class="media" alt="" />
+                        </a>
+                    </div>
+                    <div class="row-space">
+                        <lable>@x.Post.DateTime</lable>
+                    </div>
+                </div>
+             }
+        </div>
+        }
+</section><!-- end main -->

@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="~/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="~/css/main2.css">
+    <script type="text/javascript" src="~/js/jquery2.js"></script>
+    <script type="text/javascript" src="~/js/main2.js"></script>
+    <style>
+        input::-webkit-input-placeholder {
+            color: #B6C0A5;
+            font-style: italic;
+            background: #E0EFCA;
+        }
+
+        input:-moz-placeholder {
+            color: #B6C0A5;
+            font-style: italic;
+            background: #E0EFCA;
+        }
+
+        input:-ms-input-placeholder {
+            color: #B6C0A5;
+            font-style: italic;
+            background: #E0EFCA;
+        }
+
+        input {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        @*<div class="logo">
+                <a href="index.html"><img src="img/logo.png" title="Magnetic" alt="Magnetic" /></a>
+            </div> end logo*@
+
+        <div id="menu_icon"></div>
+        <nav>
+            <ul>
+                <li><a href="~/Home/Tape" class="selected">Tape</a></li>
+                <li><a href="~/Home/Index">Home</a></li>
+                <li><a href="~/Home/Profile">Profile</a></li>
+                <li><a href="~/Home/UploadFile">Upload file</a></li>
+                <li>
+                    <form asp-action="LogOff" asp-controller="Account" method="post">
+                        <input type="submit" value="Log off" />
+                    </form>
+                </li>
+                <li>
+                    <form asp-action="Search" asp-controller="Home" method="post">
+                        <input name="s" placeholder="Искать здесь..." type="search">
+                        <button type="submit">Поиск</button>
+                    </form>
+                </li>
+            </ul>
+        </nav><!-- end navigation menu -->
+    </header><!-- end header -->
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    @*<footer class="border-top footer text-muted">
+            <div class="container">
+                &copy; 2019 - PhotoLooper - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>*@
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_Layout";
+}
+
+@model UserCollector
+
+<section class="main clearfix">
+    @if (Model.Posts.Count != 0) { 
+        @foreach (var x in Model.Posts)
+         {
+            <div class="work">
+                <a href="~/Home/Photo?selected=@x.Post.Id">
+                    <img src=@x.Post.Path class="media" width="400" height="450" alt="" />
+                    <div class="caption">
+                        <div class="work_title">
+                            <h1>@x.Post.Id</h1>
+                        </div>
+                    </div>
+                </a>
+            </div>
+         }
+     }
+</section><!-- end main -->
