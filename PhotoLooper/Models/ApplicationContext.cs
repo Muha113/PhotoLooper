@@ -64,6 +64,12 @@ namespace PhotoLooper.Models
             SaveChanges();
         }
 
+        public int GetUserByPostId(int postId)
+        {
+            int usr = Posts.Where(i => i.Id == postId).ToArray()[0].UserId;
+            return usr;
+        }
+
         public List<Follower> GetFollowers(int id)
         {
             List<Follower> resFollowers = Followers.Where(p => p.FollowerId == id).ToList();

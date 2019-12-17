@@ -53,17 +53,21 @@ namespace PhotoLooper.Controllers
         {
             List<Follower> fl = _context.GetFollowers(StaticUser.Id);
             List<PostCollector> res = new List<PostCollector>();
+            List<UserCollector> usr = new List<UserCollector>();
             foreach (var x in fl)
             {
+                usr.Add(_context.GetUserCollector(x.FollowingId));
                 res.AddRange(_context.GetPostsCollector(x.FollowingId));
             }
             List<PostCollector> sortedRes = res.OrderByDescending(i => i.Post.DateTime).ToList();
+            ViewBag.UsersColl = _context;
             return View(sortedRes);
         }
 
         public IActionResult Photo(int selected)
         {
-            foreach(var x in _context.GetPostsCollector(StaticUser.Id))
+            int usrId = _context.GetUserByPostId(selected);
+            foreach(var x in _context.GetPostsCollector(usrId))
             {
                 if (x.Post.Id == selected)
                 {
