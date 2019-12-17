@@ -123,9 +123,9 @@ namespace PhotoLooper.Models
             SaveChanges();
         }
 
-        public void UpdateUser(User user)
+        public void UpdateUser(UserLocal user)
         {
-            Users.Update(user);
+            UsersLocal.Update(user);
             SaveChanges();
         }
 

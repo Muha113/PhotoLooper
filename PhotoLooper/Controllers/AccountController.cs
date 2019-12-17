@@ -55,6 +55,10 @@ namespace PhotoLooper.Controllers
                         Surname = "ffshdofh",
                         Born = DateTime.MinValue,
                         NickName = model.NickName,
+                        Email = model.Email,
+                        Description = "",
+                        Phone = "",
+                        //AvatarPath = "",
                     };
                     _logger.LogInformation(userLocal.ToString());
                     _context.CreateUserLocal(userLocal);

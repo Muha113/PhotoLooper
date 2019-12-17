@@ -98,6 +98,26 @@ namespace PhotoLooper.Controllers
             return View(_context.GetUserCollector(id));
         }
 
+        public IActionResult EditProfile()
+        {
+            UserLocal usr = _context.GetUserCollector(StaticUser.Id).User;
+            return View(usr);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(string userName, string userSurname, DateTime userBorn, string userPhone, string userDesc)
+        {
+            UserCollector usr = _context.GetUserCollector(StaticUser.Id);
+            UserLocal res = usr.User;
+            res.Name = userName;
+            res.Surname = userSurname;
+            res.Born = userBorn;
+            res.Phone = userPhone;
+            res.Description = userDesc;
+            _context.UpdateUser(res);
+            return RedirectToAction("Profile", "Home");
+        }
+
         public IActionResult UploadFile()
         {
             _logger.LogInformation("MEMKEK");

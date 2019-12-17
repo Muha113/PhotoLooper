@@ -14,5 +14,9 @@ namespace PhotoLooper.Models
         public string Surname { get; set; }
         public DateTime Born { get; set; }
         public string NickName { get; set; }
+        public string Email { get; set; }
+        public string Description { get; set; }
+        public string Phone { get; set; }
+        //public string AvatarPath { get; set; }
     }
 }
