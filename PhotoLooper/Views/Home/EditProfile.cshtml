@@ -1,0 +1,59 @@
+﻿
+@{
+    ViewData["Title"] = "EditProfile";
+    Layout = null;
+}
+
+@model UserLocal
+
+    <form method="post" asp-action="Edit" asp-controller="Home">
+        <div class="col-md-8">
+            <div class="tab-content profile-tab" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Name</label>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" name="userName" value=@Model.Name />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Surname</label>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" name="userSurname" value=@Model.Surname />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Born</label>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" name="userBorn" value=@Model.Born />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Phone</label>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" name="userPhone" value=@Model.Phone>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Description</label>
+                        </div>
+                        <div class="col-md-6">
+                            <input width="150" height="150" type="text" name="userDesc" value=@Model.Description />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="submit" value="Save" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
