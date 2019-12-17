@@ -64,6 +64,18 @@ namespace PhotoLooper.Models
             SaveChanges();
         }
 
+        public void DeleteFollower(int flr, int flw)
+        {
+            Followers.Remove(Followers.Where(i => i.FollowerId == flr && i.FollowingId == flw).ToArray()[0]);
+            SaveChanges();
+        }
+
+        public bool isFollwed(int id)
+        {
+            List<Follower> fl = Followers.Where(i => i.FollowingId == id && i.FollowerId == StaticUser.Id).ToList();
+            return fl.Count != 0;
+        }
+
         public int GetUserByPostId(int postId)
         {
             int usr = Posts.Where(i => i.Id == postId).ToArray()[0].UserId;
@@ -85,7 +97,7 @@ namespace PhotoLooper.Models
         public UserCollector FindUser(string nickname)
         {
             UserLocal[] userLocal = UsersLocal.Where(p => p.NickName == nickname).ToArray();
-            if (userLocal.Length == 0)
+            if (userLocal.Length != 0)
             {
                 UserCollector res = new UserCollector
                 {

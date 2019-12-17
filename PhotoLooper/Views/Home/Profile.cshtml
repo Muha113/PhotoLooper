@@ -109,54 +109,64 @@
 </style>
 <div class="container emp-profile main">
     @*<form method="post">*@
-        <div class="row">
-            <div class="col-md-4">
-                <div class="profile-img">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog" alt="" />
-                    <div class="file btn btn-lg btn-primary">
-                        Change Photo
-                        <input type="file" name="file" />
-                    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="profile-img">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog" alt="" />
+                <div class="file btn btn-lg btn-primary">
+                    Change Photo
+                    <input type="file" name="file" />
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="profile-head">
-                    <h5>
-                        @Model.User.Name @Model.User.Surname
-                    </h5>
-                    <h5>
-                        @Model.User.NickName
-                    </h5>
-                    @*<h6>
+        </div>
+        <div class="col-md-4">
+            <div class="profile-head">
+                <h5>
+                    @Model.User.Name @Model.User.Surname
+                </h5>
+                <h5>
+                    @Model.User.NickName
+                </h5>
+                @*<h6>
                     Web Developer and Designer
                 </h6>*@
-                    @*<p class="proile-rating">RANKINGS : <span>8/10</span></p>*@
-                </div>
+                @*<p class="proile-rating">RANKINGS : <span>8/10</span></p>*@
             </div>
-            <div class="col-md-2">
-                <div class="row-space">
-                    <label>Followers</label>
-                    <p>@Model.Following.Count</p>
-                </div>
-                <div class="row-space">
-                    <label>Following</label>
-                    <p>@Model.Followers.Count</p>
-                </div>
-            </div>
-                @if (StaticUser.Id == Model.User.UserId)
-                {
-                    <div class="col-md-2">
-                        <input type="submit" class="profile-edit-btn" name="btnAddMore" value="Edit Profile" />
-                    </div>
-                }
-                else
-                {
-                    <form method="post" asp-controller="Home" asp-action="Follow" class="col-md-2">
-                        <input type="hidden" name="postId" value=@Model.User.UserId />
-                        <input type="submit" class="profile-edit-btn" name="foll" value="Follow" />
-                    </form>
-                }
         </div>
+        <div class="col-md-2">
+            <div class="row-space">
+                <label>Followers</label>
+                <p>@Model.Following.Count</p>
+            </div>
+            <div class="row-space">
+                <label>Following</label>
+                <p>@Model.Followers.Count</p>
+            </div>
+        </div>
+        @if (StaticUser.Id == Model.User.UserId)
+        {
+            <div class="col-md-2">
+                <input type="submit" class="profile-edit-btn" name="btnAddMore" value="Edit Profile" />
+            </div>
+        }
+        else
+        {
+            @if (ViewBag.isFollowed)
+            {
+                <form method="post" asp-controller="Home" asp-action="Unfollow" class="col-md-2">
+                    <input type="hidden" name="postId" value=@Model.User.UserId />
+                    <input type="submit" class="profile-edit-btn" name="foll" value="Unfollow" />
+                </form>
+            }
+            else
+            {
+                <form method="post" asp-controller="Home" asp-action="Follow" class="col-md-2">
+                    <input type="hidden" name="postId" value=@Model.User.UserId />
+                    <input type="submit" class="profile-edit-btn" name="foll" value="Follow" />
+                </form>
+            }
+        }
+    </div>
         <div class="row">
             <div class="col-md-4">
                 <div class="profile-work">

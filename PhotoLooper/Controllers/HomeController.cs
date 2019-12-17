@@ -48,6 +48,13 @@ namespace PhotoLooper.Controllers
             _context.AddFollower(StaticUser.Id, postId);
             return RedirectToAction("Index", "Home");
         }
+        
+        [HttpPost]
+        public IActionResult Unfollow(int postId)
+        {
+            _context.DeleteFollower(StaticUser.Id, postId);
+            return RedirectToAction("Index", "Home");
+        }
 
         public IActionResult Tape()
         {
@@ -80,6 +87,14 @@ namespace PhotoLooper.Controllers
         public IActionResult Profile(int id)
         {
             if (id == 0) { id = StaticUser.Id; }
+            if (_context.isFollwed(id))
+            {
+                ViewBag.isFollowed = true;
+            }
+            else
+            {
+                ViewBag.isFollowed = false;
+            }
             return View(_context.GetUserCollector(id));
         }
 
@@ -92,7 +107,7 @@ namespace PhotoLooper.Controllers
         public IActionResult Search(string s)
         {
             UserCollector user = _context.FindUser(s);
-            if (user.User != null)
+            if (user != null)
             {
                 return RedirectToAction("Profile", "Home", new { id = user.User.UserId });
             }
