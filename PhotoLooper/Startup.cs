@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using PhotoLooper.Logger;
 using PhotoLooper.Services;
+using PhotoLooper.Hubs;
 
 namespace PhotoLooper
 {
@@ -48,6 +49,7 @@ namespace PhotoLooper
 
             services.AddMvc(options => options.EnableEndpointRouting = false);
             services.AddControllersWithViews();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,11 +67,17 @@ namespace PhotoLooper
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseDefaultFiles();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthorization();
             app.UseAuthentication();
+
+            //app.UseSignalR(routes =>
+            //{
+            //    routes.MapHub<PostHub>("/Home/Photo?selected=");
+            //});
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

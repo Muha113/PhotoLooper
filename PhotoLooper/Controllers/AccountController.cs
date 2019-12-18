@@ -41,7 +41,6 @@ namespace PhotoLooper.Controllers
             if (ModelState.IsValid)
             {
                 User user = new User { Email = model.Email, UserName = model.Email };
-                StaticUser.Id = _context.GenerateToken(model.Email);
                 // добавляем пользователя
                 var result = await _userManager.CreateAsync(user, model.Password);
                 var res = _userManager.Users.ToList();
@@ -49,7 +48,7 @@ namespace PhotoLooper.Controllers
                 {
                     UserLocal userLocal = new UserLocal
                     {
-                        UserId = StaticUser.Id,
+                        UserId = StaticUser.GetUserId(model.Email),
                         IsPostSavedLocal = true,
                         Name = "dsdihff",
                         Surname = "ffshdofh",
@@ -138,7 +137,6 @@ namespace PhotoLooper.Controllers
                     await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe = true, false);
                 if (result.Succeeded)
                 {
-                    StaticUser.Id = _context.GenerateToken(model.Email);
                     // проверяем, принадлежит ли URL приложению
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                     {

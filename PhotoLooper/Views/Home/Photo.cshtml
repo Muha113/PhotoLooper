@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Photo";
     Layout = "_Layout";
 }
@@ -35,20 +34,49 @@
         </div>
         <div class="row-space">
             <div class="wrap-input100 position-relative">
-                <input type="text" size="40" name="com" />
+                <input type="text" size="40" name="com" id="message"/>
                 <input type="hidden" name="pId" value=@Model.Post.Id />
-                <input type="submit" icon="~/images/send.ico" />
+                <input type="submit" id="sendBtn" icon="~/images/send.ico" />
             </div>
             @if (Model.Comments.Count != 0)
             {
                 @foreach (var x in Model.Comments)
                 {
                     <div>
-                        <span>Comment : </span>
+                        <a href="~/Home/Profile?id=@x.UserId">@ViewBag.context.GetUserCollector(x.UserId).User.NickName : </a>
                         <a>@x.comment</a>
                     </div>
                 }
             }
+            <div>
+                <span id="commentUser"></span>
+                <a id="commentPost"></a>
+            </div>
+            @*<script src="~/js/signalr.min.js"></script>
+            <script>
+                let hubUrl = 'https://localhost:5001/Home/Photo?selected=@Model.Post.Id';
+                const hubConnection = new signalR.HubConnectionBuilder()
+                    .withUrl(hubUrl)
+                    .configureLogging(signalR.LogLevel.Information)
+                    .build();
+
+                hubConnection.on("Send", function (data) {
+
+                    let elem = document.createElement("p");
+                    elem.appendChild(document.createTextNode(data));
+                    let firstElem = document.getElementById("commentPost").firstChild;
+                    document.getElementById("commentPost").insertBefore(elem, firstElem);
+
+                });
+
+                document.getElementById("sendBtn").addEventListener("click", function (e) {
+                    let message = document.getElementById("message").value;
+                    hubConnection.invoke("Send", message);
+                });
+
+                hubConnection.start();
+            </script>
+            <span>@Model.Post.DateTime</span>*@
         </div>
     </div>
 </form>

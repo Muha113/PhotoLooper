@@ -142,7 +142,6 @@ C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\obj\Debug\netcoreapp3.0\Razo
 C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\bin\Debug\netcoreapp3.0\MailKit.dll
 C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\bin\Debug\netcoreapp3.0\MimeKit.dll
 C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\bin\Debug\netcoreapp3.0\BouncyCastle.Crypto.dll
-C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\obj\Debug\netcoreapp3.0\PhotoLooper.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\bin\Debug\netcoreapp3.0\web.config
 C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\obj\Debug\netcoreapp3.0\Razor\Views\Error\NotFound.cshtml.g.cs
 C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\bin\Debug\netcoreapp3.0\config.json
@@ -154,3 +153,7 @@ C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\obj\Debug\netcoreapp3.0\Razo
 C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\obj\Debug\netcoreapp3.0\Razor\Views\Home\Tape.cshtml.g.cs
 C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\obj\Debug\netcoreapp3.0\Razor\Views\Home\_Layout.cshtml.g.cs
 C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\obj\Debug\netcoreapp3.0\Razor\Views\Home\EditProfile.cshtml.g.cs
+C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\bin\Debug\netcoreapp3.0\libman.json
+C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\bin\Debug\netcoreapp3.0\package.json
+C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\bin\Debug\netcoreapp3.0\System.Net.WebSockets.WebSocketProtocol.dll
+C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\obj\Debug\netcoreapp3.0\PhotoLooper.MvcApplicationPartsAssemblyInfo.cache

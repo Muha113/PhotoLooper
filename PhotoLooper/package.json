@@ -1,0 +1,8 @@
+{
+  "version": "1.0.0",
+  "name": "photolooper",
+  "private": true,
+  "dependencies": {
+    "@aspnet/signalr": "^1.0.0"
+  }
+}

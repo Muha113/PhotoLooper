@@ -43,16 +43,6 @@ namespace PhotoLooper.Models
             return resPosts;
         }
 
-        public int GenerateToken(string email)
-        {
-            int res = 0;
-            for(int i = 0; i < email.Length; i++)
-            {
-                res += email[i];
-            }
-            return res;
-        }
-
         public void AddFollower(int flr, int flw)
         {
             Follower res = new Follower
@@ -70,9 +60,9 @@ namespace PhotoLooper.Models
             SaveChanges();
         }
 
-        public bool isFollwed(int id)
+        public bool isFollwed(int id, int userId)
         {
-            List<Follower> fl = Followers.Where(i => i.FollowingId == id && i.FollowerId == StaticUser.Id).ToList();
+            List<Follower> fl = Followers.Where(i => i.FollowingId == id && i.FollowerId == userId).ToList();
             return fl.Count != 0;
         }
 

@@ -33,7 +33,7 @@ namespace PhotoLooper.Controllers
             if (!User.Identity.IsAuthenticated)
                 return RedirectToAction("Login", "Account");
             //Response.StatusCode = 404;
-            return View(_context.GetUserCollector(StaticUser.Id));
+            return View(_context.GetUserCollector(StaticUser.GetUserId(User.Identity.Name)));
         }
 
         public IActionResult Privacy()
@@ -45,20 +45,20 @@ namespace PhotoLooper.Controllers
         [HttpPost]
         public IActionResult Follow(int postId)
         {
-            _context.AddFollower(StaticUser.Id, postId);
+            _context.AddFollower(StaticUser.GetUserId(User.Identity.Name), postId);
             return RedirectToAction("Index", "Home");
         }
         
         [HttpPost]
         public IActionResult Unfollow(int postId)
         {
-            _context.DeleteFollower(StaticUser.Id, postId);
+            _context.DeleteFollower(StaticUser.GetUserId(User.Identity.Name), postId);
             return RedirectToAction("Index", "Home");
         }
 
         public IActionResult Tape()
         {
-            List<Follower> fl = _context.GetFollowers(StaticUser.Id);
+            List<Follower> fl = _context.GetFollowers(StaticUser.GetUserId(User.Identity.Name));
             List<PostCollector> res = new List<PostCollector>();
             List<UserCollector> usr = new List<UserCollector>();
             foreach (var x in fl)
@@ -74,6 +74,7 @@ namespace PhotoLooper.Controllers
         public IActionResult Photo(int selected)
         {
             int usrId = _context.GetUserByPostId(selected);
+            ViewBag.context = _context;
             foreach(var x in _context.GetPostsCollector(usrId))
             {
                 if (x.Post.Id == selected)
@@ -86,8 +87,8 @@ namespace PhotoLooper.Controllers
 
         public IActionResult Profile(int id)
         {
-            if (id == 0) { id = StaticUser.Id; }
-            if (_context.isFollwed(id))
+            if (id == 0) { id = StaticUser.GetUserId(User.Identity.Name); }
+            if (_context.isFollwed(id, StaticUser.GetUserId(User.Identity.Name)))
             {
                 ViewBag.isFollowed = true;
             }
@@ -100,14 +101,14 @@ namespace PhotoLooper.Controllers
 
         public IActionResult EditProfile()
         {
-            UserLocal usr = _context.GetUserCollector(StaticUser.Id).User;
+            UserLocal usr = _context.GetUserCollector(StaticUser.GetUserId(User.Identity.Name)).User;
             return View(usr);
         }
 
         [HttpPost]
         public IActionResult Edit(string userName, string userSurname, DateTime userBorn, string userPhone, string userDesc)
         {
-            UserCollector usr = _context.GetUserCollector(StaticUser.Id);
+            UserCollector usr = _context.GetUserCollector(StaticUser.GetUserId(User.Identity.Name));
             UserLocal res = usr.User;
             res.Name = userName;
             res.Surname = userSurname;
@@ -121,7 +122,7 @@ namespace PhotoLooper.Controllers
         public IActionResult UploadFile()
         {
             _logger.LogInformation("MEMKEK");
-            return View(_context.GetPostsCollector(StaticUser.Id));
+            return View(_context.GetPostsCollector(StaticUser.GetUserId(User.Identity.Name)));
         }
 
         public IActionResult Search(string s)
@@ -147,14 +148,14 @@ namespace PhotoLooper.Controllers
             if (file != null)
             {
                 // путь к папке Files
-                string fileName = _context.GetUserCollector(StaticUser.Id).User.UserId.ToString() + "file" + _context.Posts.Where(p => p.UserId == StaticUser.Id).Count().ToString();
+                string fileName = _context.GetUserCollector(StaticUser.GetUserId(User.Identity.Name)).User.UserId.ToString() + "file" + _context.Posts.Where(p => p.UserId == StaticUser.GetUserId(User.Identity.Name)).Count().ToString();
                 string path = "/Files/" + fileName + ".png";
                 // сохраняем файл в папку Files в каталоге wwwroot
                 using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
                 {
                     file.CopyTo(fileStream);
                 }
-                _context.Posts.Add(new Post { UserId = StaticUser.Id, Path = path , DateTime = DateTime.Now});
+                _context.Posts.Add(new Post { UserId = StaticUser.GetUserId(User.Identity.Name), Path = path , DateTime = DateTime.Now});
                 _context.SaveChanges();
             }
 
@@ -166,9 +167,10 @@ namespace PhotoLooper.Controllers
         {
             if (com != "")
             {
-                _context.AddComment(new Comment { comment = com, PostId = pId });
+                int tmp = StaticUser.GetUserId(User.Identity.Name);
+                _context.AddComment(new Comment { comment = com, PostId = pId, UserId = StaticUser.GetUserId(User.Identity.Name) });
             }
-            return RedirectToAction("Photo", "Home", new { selected = pId});
+            return RedirectToAction("Photo", "Home", new { selected = pId });
         }
     }
 }
