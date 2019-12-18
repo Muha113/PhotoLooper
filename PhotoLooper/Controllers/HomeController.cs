@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -96,6 +95,7 @@ namespace PhotoLooper.Controllers
             {
                 ViewBag.isFollowed = false;
             }
+            ViewBag.context = _context;
             return View(_context.GetUserCollector(id));
         }
 
@@ -167,7 +167,7 @@ namespace PhotoLooper.Controllers
         {
             if (com != "")
             {
-                int tmp = StaticUser.GetUserId(User.Identity.Name);
+                //int tmp = StaticUser.GetUserId(User.Identity.Name);
                 _context.AddComment(new Comment { comment = com, PostId = pId, UserId = StaticUser.GetUserId(User.Identity.Name) });
             }
             return RedirectToAction("Photo", "Home", new { selected = pId });

@@ -74,10 +74,10 @@ namespace PhotoLooper
             app.UseAuthorization();
             app.UseAuthentication();
 
-            //app.UseSignalR(routes =>
-            //{
-            //    routes.MapHub<PostHub>("/Home/Photo?selected=");
-            //});
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<PostHub>("/HuHub");
+            });
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
