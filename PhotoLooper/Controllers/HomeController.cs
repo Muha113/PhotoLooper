@@ -84,6 +84,14 @@ namespace PhotoLooper.Controllers
             return View();
         }
 
+        public IActionResult SetUserAvatar(string path, int postId)
+        {
+            UserLocal usr = _context.GetUserCollector(StaticUser.GetUserId(User.Identity.Name)).User;
+            usr.AvatarPath = path;
+            _context.UpdateUser(usr);
+            return RedirectToAction("Photo", "Home", new { selected = postId });
+        }
+
         public IActionResult Profile(int id)
         {
             if (id == 0) { id = StaticUser.GetUserId(User.Identity.Name); }
@@ -163,14 +171,15 @@ namespace PhotoLooper.Controllers
         }
 
         [HttpPost]
-        public IActionResult TypeComment(string com, int pId)
+        public void TypeComment(string com, int pId) 
         {
+            Console.WriteLine("SOSISISISIIS");
             if (com != "")
             {
                 //int tmp = StaticUser.GetUserId(User.Identity.Name);
                 _context.AddComment(new Comment { comment = com, PostId = pId, UserId = StaticUser.GetUserId(User.Identity.Name) });
             }
-            return RedirectToAction("Photo", "Home", new { selected = pId });
+            //return RedirectToAction("Photo", "Home", new { selected = pId });
         }
     }
 }

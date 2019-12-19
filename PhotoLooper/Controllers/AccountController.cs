@@ -57,7 +57,7 @@ namespace PhotoLooper.Controllers
                         Email = model.Email,
                         Description = "",
                         Phone = "",
-                        //AvatarPath = "",
+                        AvatarPath = "",
                     };
                     _logger.LogInformation(userLocal.ToString());
                     _context.CreateUserLocal(userLocal);

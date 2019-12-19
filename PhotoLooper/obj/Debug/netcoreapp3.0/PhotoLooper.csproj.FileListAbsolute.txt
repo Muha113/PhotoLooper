@@ -156,3 +156,4 @@ C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\obj\Debug\netcoreapp3.0\Phot
 C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\obj\Debug\netcoreapp3.0\PhotoLooper.csproj.CopyComplete
 C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\obj\Debug\netcoreapp3.0\PhotoLooper.dll
 C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\obj\Debug\netcoreapp3.0\PhotoLooper.pdb
+C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\obj\Debug\netcoreapp3.0\PhotoLooper.csprojAssemblyReference.cache
