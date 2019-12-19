@@ -10,15 +10,6 @@
 <head>
     <meta charset="utf-8" />
     <meta id="viewport" name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
-    @*<style>
-        /*#testim {
-            top: 100px;
-            left: 100px;
-            bottom: 0; right: 0;
-        }*/
-    </style>
-    <script src="~/scripts/jquery-1.10.2.js"></script>
-    <script src="~/scripts/jquery.unobtrusive-ajax.js"></script>*@
     <style>
         .border {
         list-style: none;
@@ -71,11 +62,15 @@
                 <input type="submit" value="Set as avatar"/>
             </form>
         }
+        <div class="col-md-2">
+            <span>Posted By: </span>
+            <a href="/Home/Profile?id=@Model.Post.UserId">@ViewBag.context.GetUserCollector(Model.Post.UserId).User.NickName</a>
+        </div>
         <div class="row-space">
                 <div class="wrap-input100 position-relative">
                     <input type="text" size="40" name="com" id="message" />
                     <input type="hidden" name="pId" value=@Model.Post.Id />
-                    <input type="submit" id="sendBtn" @*icon="~/images/send.ico"*@ />
+                    <input type="submit" id="sendBtn" />
                 </div>
             @if (Model.Comments.Count != 0)
             {
@@ -91,42 +86,46 @@
                     }
                 </ul>
             }
-            <div>
-                <span id="commentUser"></span>
-                <a id="commentPost"></a>
-            </div>
+            <ul class="border" id="commentPost">
+            </ul>
             <script src="~/js/signalr.min.js"></script>
             <script>
-                //Html.Hidden("messg", "a");
                 const hubConnection = new signalR.HubConnectionBuilder()
                     .withUrl("/HuHub")
                     .configureLogging(signalR.LogLevel.Information)
                     .build();
 
-                hubConnection.on("Send", function (data) {
+                hubConnection.on("Send", function (data, nick, id) {
 
-                    //alert("asdasd");
-                    let elem = document.createElement("p");
-                    elem.appendChild(document.createTextNode(data));
-                    let firstElem = document.getElementById("commentPost").firstChild;
-                    document.getElementById("commentPost").insertBefore(elem, firstElem);
+                    //alert(nick, id);
+                    let element = document.createElement("li");
+                    element.innerHTML = `
+                                <div id="results" class="row-space">
+                                    <div><a href="~/Home/Profile?id=${id}">${nick} : </a></div>
+                                    <div><a>${data}</a></div>
+                                </div>`;
+                    let firstElem = document.getElementById("commentPost").firstElem;
+                    document.getElementById("commentPost").appendChild(element, firstElem);
                 });
 
-                hubConnection.on("Receive", function (data) {
+                hubConnection.on("Receive", function (data, nick, id) {
 
-                    //alert(data);
-                    let elem = document.createElement("p");
-                    elem.appendChild(document.createTextNode(data));
-                    let firstElem = document.getElementById("commentPost").firstChild;
-                    document.getElementById("commentPost").insertBefore(elem, firstElem);
-
+                    //alert(nick, id);
+                    let element = document.createElement("li");
+                    element.innerHTML = `
+                                <div id="results" class="row-space">
+                                    <div><a href="~/Home/Profile?id=${id}">${nick} : </a></div>
+                                    <div><a>${data}</a></div>
+                                </div>`;
+                    let firstElem = document.getElementById("commentPost");
+                    document.getElementById("commentPost").appendChild(element, firstElem);
                 });
 
                 document.getElementById("sendBtn").addEventListener("click", function (e) {
-                    alert("djsabkjdba");
+                    //alert("djsabkjdba");
                     
                     let message = document.getElementById("message").value;
-                    hubConnection.invoke("Send", "@Model.Post.Id", message);
+                    hubConnection.invoke("Send", "@Model.Post.Id", message, "@ViewBag.context.GetUserCollector(StaticUser.GetUserId(User.Identity.Name)).User.NickName", @StaticUser.GetUserId(User.Identity.Name));
                     $.ajax({
                         url:'@Url.Action("TypeComment")',
                         type: "POST",

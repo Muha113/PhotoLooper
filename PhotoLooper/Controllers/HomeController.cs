@@ -60,6 +60,7 @@ namespace PhotoLooper.Controllers
             List<Follower> fl = _context.GetFollowers(StaticUser.GetUserId(User.Identity.Name));
             List<PostCollector> res = new List<PostCollector>();
             List<UserCollector> usr = new List<UserCollector>();
+            ViewBag.context = _context;
             foreach (var x in fl)
             {
                 usr.Add(_context.GetUserCollector(x.FollowingId));
@@ -86,8 +87,13 @@ namespace PhotoLooper.Controllers
 
         public IActionResult SetUserAvatar(string path, int postId)
         {
+            string newPath = "";
+            for(int i = 0; i < path.Length - 1; i++)
+            {
+                newPath += path[i];
+            }
             UserLocal usr = _context.GetUserCollector(StaticUser.GetUserId(User.Identity.Name)).User;
-            usr.AvatarPath = path;
+            usr.AvatarPath = newPath;
             _context.UpdateUser(usr);
             return RedirectToAction("Photo", "Home", new { selected = postId });
         }
@@ -173,7 +179,6 @@ namespace PhotoLooper.Controllers
         [HttpPost]
         public void TypeComment(string com, int pId) 
         {
-            Console.WriteLine("SOSISISISIIS");
             if (com != "")
             {
                 //int tmp = StaticUser.GetUserId(User.Identity.Name);

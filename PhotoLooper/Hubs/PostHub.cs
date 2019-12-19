@@ -9,11 +9,11 @@ namespace PhotoLooper.Hubs
 {
     public class PostHub : Hub
     {
-        public async Task Send(string groupname, string post)
+        public async Task Send(string groupname, string post, string nickName, int userId)
         {
             //Console.WriteLine("\n\n\n========================================LOLOLOLOL\n\n\n");
 
-            await Clients.Group(groupname).SendAsync("Receive", post);
+            await Clients.Group(groupname).SendAsync("Receive", post, nickName, userId);
         }
 
         public void JoinGroup(string groupId)
