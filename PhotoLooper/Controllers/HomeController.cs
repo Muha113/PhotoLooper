@@ -142,13 +142,20 @@ namespace PhotoLooper.Controllers
 
         public IActionResult Search(string s)
         {
-            UserCollector user = _context.FindUser(s);
-            if (user != null)
+            List<UserCollector> usr = new List<UserCollector>();
+            if (s != null)
             {
-                return RedirectToAction("Profile", "Home", new { id = user.User.UserId });
+                usr = _context.FindUserByPrefix(s);
             }
-            return View();
+            return View(usr);
         }
+        
+        //[HttpPost]
+        //public IActionResult SearchUsers(string s)
+        //{
+        //    List<UserCollector> tmp = _context.FindUserByPrefix(s);
+        //    return RedirectToAction(});
+        //}
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

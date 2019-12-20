@@ -99,6 +99,26 @@ namespace PhotoLooper.Services
             return null;
         }
 
+        public List<UserCollector> FindUserByPrefix(string pref)
+        {
+            UserLocal[] userLocal = _context.UsersLocal.Where(p => p.NickName.ToLower().StartsWith(pref.ToLower())).ToArray();
+            List<UserCollector> result = new List<UserCollector>();
+            if (userLocal.Length != 0)
+            {
+                for (int i = 0; i < userLocal.Length; i++)
+                {
+                    result.Add(new UserCollector
+                    {
+                        User = userLocal[0],
+                        Posts = GetPostsCollector(userLocal[0].Id),
+                        Followers = GetFollowers(userLocal[0].Id),
+                        Following = GetFollowings(userLocal[0].Id),
+                    });
+                }
+            }
+            return result;
+        }
+
         public void AddComment(Comment comment)
         {
             _context.Comments.Add(comment);

@@ -22,5 +22,6 @@ namespace PhotoLooper.Services
         public void UpdateUser(UserLocal user);
         public UserCollector GetUserCollector(int id);
         public int GetPostsAmount(int id);
+        public List<UserCollector> FindUserByPrefix(string pref);
     }
 }

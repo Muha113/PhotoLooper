@@ -11,5 +11,4 @@ namespace PhotoLooper.ViewModels
         public string Email { get; set; }
         public string NickName { get; set; }
     }
-
 }
