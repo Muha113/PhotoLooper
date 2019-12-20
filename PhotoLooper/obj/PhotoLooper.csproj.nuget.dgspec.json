@@ -38,6 +38,10 @@
       "frameworks": {
         "netcoreapp3.0": {
           "dependencies": {
+            "Google.Apis.Drive.v3": {
+              "target": "Package",
+              "version": "[1.42.0.1778, )"
+            },
             "MailKit": {
               "target": "Package",
               "version": "[2.4.1, )"

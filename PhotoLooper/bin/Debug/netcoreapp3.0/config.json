@@ -1,6 +1,11 @@
 {
   "emailhost": {
     "email": "dan4kmuha113@yandex.ru",
-    "password":  "5oB26eTCxZ"
+    "password": "5oB26eTCxZ"
+  },
+  "host": {
+    "webhost": "smtp.yandex.ru",
+    "port": 25,
+    "useSsl": false
   }
 }

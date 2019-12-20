@@ -9,17 +9,18 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PhotoLooper.Models;
+using PhotoLooper.Services;
 
 namespace PhotoLooper.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        public ApplicationContext _context;
+        public IDbService _context;
         public UserManager<User> _userManager;
         public IHostingEnvironment _appEnvironment;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationContext context, UserManager<User> userManager, IHostingEnvironment appEnvironment)
+        public HomeController(ILogger<HomeController> logger, IDbService context, UserManager<User> userManager, IHostingEnvironment appEnvironment)
         {
             _logger = logger;
             _context = context;
@@ -162,15 +163,14 @@ namespace PhotoLooper.Controllers
             if (file != null)
             {
                 // путь к папке Files
-                string fileName = _context.GetUserCollector(StaticUser.GetUserId(User.Identity.Name)).User.UserId.ToString() + "file" + _context.Posts.Where(p => p.UserId == StaticUser.GetUserId(User.Identity.Name)).Count().ToString();
+                string fileName = _context.GetUserCollector(StaticUser.GetUserId(User.Identity.Name)).User.UserId.ToString() + "file" + _context.GetPostsAmount(StaticUser.GetUserId(User.Identity.Name)).ToString();
                 string path = "/Files/" + fileName + ".png";
                 // сохраняем файл в папку Files в каталоге wwwroot
                 using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
                 {
                     file.CopyTo(fileStream);
                 }
-                _context.Posts.Add(new Post { UserId = StaticUser.GetUserId(User.Identity.Name), Path = path , DateTime = DateTime.Now});
-                _context.SaveChanges();
+                _context.CreatePost(new Post { UserId = StaticUser.GetUserId(User.Identity.Name), Path = path, DateTime = DateTime.Now });
             }
 
             return RedirectToAction("Index", "Home");

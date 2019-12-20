@@ -18,7 +18,7 @@ namespace PhotoLooper.Services
             _config = config;
         }*/
 
-        public async Task SendEmailAsync(string email, string subject, string message)
+        public async Task SendEmailAsync(string email, string subject, string message, IConfiguration config)
         {
             var emailMessage = new MimeMessage();
 
@@ -32,8 +32,8 @@ namespace PhotoLooper.Services
 
             using (var client = new SmtpClient())
             {
-                await client.ConnectAsync("smtp.yandex.ru", 25, false);
-                await client.AuthenticateAsync("dan4kmuha113@yandex.ru", "5oB26eTCxZ");
+                await client.ConnectAsync(config["host:webhost"], int.Parse(config["host:port"]), bool.Parse(config["host:useSsl"]));
+                await client.AuthenticateAsync(config["emailhost:email"], config["emailhost:password"]);
                 //await client.AuthenticateAsync()
                 await client.SendAsync(emailMessage);
 

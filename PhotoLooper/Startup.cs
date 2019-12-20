@@ -45,7 +45,8 @@ namespace PhotoLooper
                 options.Password.RequireNonAlphanumeric = false;
             }).AddEntityFrameworkStores<ApplicationContext>().AddDefaultTokenProviders();
 
-            //services.AddTransient<IEmailService>();
+            services.AddTransient<IDbService, DbService>();
+            services.AddTransient<IEmailService, EmailService>();
 
             services.AddMvc(options => options.EnableEndpointRouting = false);
             services.AddControllersWithViews();

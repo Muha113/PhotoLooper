@@ -107,6 +107,24 @@
     font-weight: 600;
     color: #0062cc;
 }
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 12px 16px;
+    z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
 </style>
 <div class="container emp-profile main">
     @*<form method="post">*@
@@ -137,14 +155,32 @@
                 @*<p class="proile-rating">RANKINGS : <span>8/10</span></p>*@
             </div>
         </div>
-        <div class="col-md-2">
-            <div class="row-space">
+        <div class="row-space">
+            <div class="row-space dropdown">
                 <label>Followers</label>
                 <p>@Model.Following.Count</p>
+                @if (Model.Following.Count != 0)
+                {
+                    <div class="dropdown-content">
+                        @foreach (var x in Model.Following)
+                        {
+                            <a href="/Home/Profile?id=@x.FollowerId">@ViewBag.context.GetUserCollector(x.FollowerId).User.NickName</a>
+                        }
+                    </div>
+                }
             </div>
-            <div class="row-space">
+            <div class="row-space dropdown">
                 <label>Following</label>
                 <p>@Model.Followers.Count</p>
+                @if (Model.Followers.Count != 0)
+                {
+                    <div class="dropdown-content">
+                        @foreach (var x in Model.Followers)
+                        {
+                            <a href="/Home/Profile?id=@x.FollowingId">@ViewBag.context.GetUserCollector(x.FollowingId).User.NickName</a>
+                        }
+                    </div>
+                }
             </div>
         </div>
         @if (StaticUser.GetUserId(User.Identity.Name) == Model.User.UserId)

@@ -19,15 +19,19 @@ namespace PhotoLooper.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger _logger;
-        private readonly ApplicationContext _context;
+        private readonly IDbService _context;
+        private readonly IConfiguration _config;
+        private readonly IEmailService _emailService;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, ILogger<AccountController> logger, IConfiguration config, ApplicationContext context)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IEmailService emailService, ILogger<AccountController> logger, IConfiguration config, IDbService context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
-            _logger.LogInformation($"\n\n\n{config["emailhost:email"]}\n\n\n");
+            //_logger.LogInformation($"\n\n\n{config["emailhost:email"]}\n\n\n");
+            _config = config;
             _context = context;
+            _emailService = emailService;
         }
         [HttpGet]
         public IActionResult Register()
@@ -50,8 +54,8 @@ namespace PhotoLooper.Controllers
                     {
                         UserId = StaticUser.GetUserId(model.Email),
                         IsPostSavedLocal = true,
-                        Name = "dsdihff",
-                        Surname = "ffshdofh",
+                        Name = "not set",
+                        Surname = "not set",
                         Born = DateTime.MinValue,
                         NickName = model.NickName,
                         Email = model.Email,
@@ -64,18 +68,17 @@ namespace PhotoLooper.Controllers
                     // установка куки
                     await _signInManager.SignInAsync(user, false);
                     // генерация токена для пользователя
-                    /*var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Action(
                         "ConfirmEmail",
                         "Account",
                         new { userId = user.Id, code = code },
                         protocol: HttpContext.Request.Scheme);
-                    EmailService emailService = new EmailService();
-                    await emailService.SendEmailAsync(model.Email, "Confirm your account",
-                        $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>link</a>");
+                    await _emailService.SendEmailAsync(model.Email, "Confirm your account",
+                        $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>link</a>", _config);
 
-                    return Content("Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме");*/
-                    return RedirectToAction("Index", "Home");
+                    return Content("Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме");
+                    //return RedirectToAction("Index", "Home");
                 }
                 else
                 {
