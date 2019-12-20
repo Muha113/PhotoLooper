@@ -54,7 +54,7 @@
                 </div>
             </div>
         </div>
-        @if(StaticUser.GetUserId(User.Identity.Name) == ViewBag.context.GetUserCollector(Model.Post.UserId).User.UserId)
+        @if(ViewBag.user.Id == ViewBag.context.GetUserCollector(Model.Post.UserId).User.Id)
         {
             <form asp-controller="Home" asp-action="SetUserAvatar" method="post">
                 <input type="hidden" name="path" value=@Model.Post.Path/>
@@ -125,7 +125,7 @@
                     //alert("djsabkjdba");
                     
                     let message = document.getElementById("message").value;
-                    hubConnection.invoke("Send", "@Model.Post.Id", message, "@ViewBag.context.GetUserCollector(StaticUser.GetUserId(User.Identity.Name)).User.NickName", @StaticUser.GetUserId(User.Identity.Name));
+                    hubConnection.invoke("Send", "@Model.Post.Id", message, "@ViewBag.context.GetUserCollector(ViewBag.user.Id).User.NickName", "@ViewBag.user.Id");
                     $.ajax({
                         url:'@Url.Action("TypeComment")',
                         type: "POST",

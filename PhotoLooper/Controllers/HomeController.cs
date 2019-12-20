@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -17,10 +18,10 @@ namespace PhotoLooper.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         public IDbService _context;
-        public UserManager<User> _userManager;
+        public UserManager<SocialUser> _userManager;
         public IHostingEnvironment _appEnvironment;
 
-        public HomeController(ILogger<HomeController> logger, IDbService context, UserManager<User> userManager, IHostingEnvironment appEnvironment)
+        public HomeController(ILogger<HomeController> logger, IDbService context, UserManager<SocialUser> userManager, IHostingEnvironment appEnvironment)
         {
             _logger = logger;
             _context = context;
@@ -28,12 +29,13 @@ namespace PhotoLooper.Controllers
             _appEnvironment = appEnvironment;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             if (!User.Identity.IsAuthenticated)
                 return RedirectToAction("Login", "Account");
             //Response.StatusCode = 404;
-            return View(_context.GetUserCollector(StaticUser.GetUserId(User.Identity.Name)));
+            SocialUser usr = await _userManager.GetUserAsync(User);
+            return View(_context.GetUserCollector(usr.Id));
         }
 
         public IActionResult Privacy()
@@ -43,22 +45,25 @@ namespace PhotoLooper.Controllers
         }
 
         [HttpPost]
-        public IActionResult Follow(int postId)
+        public async Task<IActionResult> Follow(string postId)
         {
-            _context.AddFollower(StaticUser.GetUserId(User.Identity.Name), postId);
+            SocialUser usr = await _userManager.GetUserAsync(User);
+            _context.AddFollower(usr.Id, postId);
             return RedirectToAction("Index", "Home");
         }
         
         [HttpPost]
-        public IActionResult Unfollow(int postId)
+        public async Task<IActionResult> Unfollow(string postId)
         {
-            _context.DeleteFollower(StaticUser.GetUserId(User.Identity.Name), postId);
+            SocialUser usr = await _userManager.GetUserAsync(User);
+            _context.DeleteFollower(usr.Id, postId);
             return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult Tape()
+        public async Task<IActionResult> Tape()
         {
-            List<Follower> fl = _context.GetFollowers(StaticUser.GetUserId(User.Identity.Name));
+            SocialUser user = await _userManager.GetUserAsync(User);
+            List<Follower> fl = _context.GetFollowers(user.Id);
             List<PostCollector> res = new List<PostCollector>();
             List<UserCollector> usr = new List<UserCollector>();
             ViewBag.context = _context;
@@ -72,10 +77,12 @@ namespace PhotoLooper.Controllers
             return View(sortedRes);
         }
 
-        public IActionResult Photo(int selected)
+        public async Task<IActionResult> Photo(int selected)
         {
-            int usrId = _context.GetUserByPostId(selected);
+            SocialUser user = await _userManager.GetUserAsync(User);
+            string usrId = _context.GetUserByPostId(selected);
             ViewBag.context = _context;
+            ViewBag.user = user;
             foreach(var x in _context.GetPostsCollector(usrId))
             {
                 if (x.Post.Id == selected)
@@ -86,23 +93,26 @@ namespace PhotoLooper.Controllers
             return View();
         }
 
-        public IActionResult SetUserAvatar(string path, int postId)
+        public async Task<IActionResult> SetUserAvatar(string path, int postId)
         {
+            SocialUser user = await _userManager.GetUserAsync(User);
             string newPath = "";
             for(int i = 0; i < path.Length - 1; i++)
             {
                 newPath += path[i];
             }
-            UserLocal usr = _context.GetUserCollector(StaticUser.GetUserId(User.Identity.Name)).User;
+            SocialUser usr = _context.GetUserCollector(user.Id).User;
             usr.AvatarPath = newPath;
             _context.UpdateUser(usr);
             return RedirectToAction("Photo", "Home", new { selected = postId });
         }
 
-        public IActionResult Profile(int id)
+        public async Task<IActionResult> Profile(string id)
         {
-            if (id == 0) { id = StaticUser.GetUserId(User.Identity.Name); }
-            if (_context.isFollwed(id, StaticUser.GetUserId(User.Identity.Name)))
+            SocialUser user = await _userManager.GetUserAsync(User);
+
+            if (id == null) { id = user.Id; }
+            if (_context.isFollwed(id, user.Id))
             {
                 ViewBag.isFollowed = true;
             }
@@ -111,33 +121,37 @@ namespace PhotoLooper.Controllers
                 ViewBag.isFollowed = false;
             }
             ViewBag.context = _context;
+            ViewBag.user = user;
             return View(_context.GetUserCollector(id));
         }
 
-        public IActionResult EditProfile()
+        public async Task<IActionResult> EditProfile()
         {
-            UserLocal usr = _context.GetUserCollector(StaticUser.GetUserId(User.Identity.Name)).User;
+            SocialUser user = await _userManager.GetUserAsync(User);
+            SocialUser usr = _context.GetUserCollector(user.Id).User;
             return View(usr);
         }
 
         [HttpPost]
-        public IActionResult Edit(string userName, string userSurname, DateTime userBorn, string userPhone, string userDesc)
+        public async Task<IActionResult> Edit(string userName, string userSurname, DateTime userBorn, string userPhone, string userDesc)
         {
-            UserCollector usr = _context.GetUserCollector(StaticUser.GetUserId(User.Identity.Name));
-            UserLocal res = usr.User;
+            SocialUser user = await _userManager.GetUserAsync(User);
+            UserCollector usr = _context.GetUserCollector(user.Id);
+            SocialUser res = usr.User;
             res.Name = userName;
             res.Surname = userSurname;
             res.Born = userBorn;
-            res.Phone = userPhone;
+            res.PhoneNumber = userPhone;
             res.Description = userDesc;
             _context.UpdateUser(res);
             return RedirectToAction("Profile", "Home");
         }
 
-        public IActionResult UploadFile()
+        public async Task<IActionResult> UploadFile()
         {
+            SocialUser user = await _userManager.GetUserAsync(User);
             _logger.LogInformation("MEMKEK");
-            return View(_context.GetPostsCollector(StaticUser.GetUserId(User.Identity.Name)));
+            return View(_context.GetPostsCollector(user.Id));
         }
 
         public IActionResult Search(string s)
@@ -165,31 +179,33 @@ namespace PhotoLooper.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddFile(IFormFile file)
+        public async Task<IActionResult> AddFile(IFormFile file)
         {
+            SocialUser user = await _userManager.GetUserAsync(User);
             if (file != null)
             {
                 // путь к папке Files
-                string fileName = _context.GetUserCollector(StaticUser.GetUserId(User.Identity.Name)).User.UserId.ToString() + "file" + _context.GetPostsAmount(StaticUser.GetUserId(User.Identity.Name)).ToString();
+                string fileName = _context.GetUserCollector(user.Id).User.Id + "file" + _context.GetPostsAmount(user.Id).ToString();
                 string path = "/Files/" + fileName + ".png";
                 // сохраняем файл в папку Files в каталоге wwwroot
                 using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
                 {
                     file.CopyTo(fileStream);
                 }
-                _context.CreatePost(new Post { UserId = StaticUser.GetUserId(User.Identity.Name), Path = path, DateTime = DateTime.Now });
+                _context.CreatePost(new Post { UserId = user.Id, Path = path, DateTime = DateTime.Now });
             }
 
             return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
-        public void TypeComment(string com, int pId) 
+        public async Task TypeComment(string com, int pId) 
         {
+            SocialUser user = await _userManager.GetUserAsync(User);
             if (com != "")
             {
                 //int tmp = StaticUser.GetUserId(User.Identity.Name);
-                _context.AddComment(new Comment { comment = com, PostId = pId, UserId = StaticUser.GetUserId(User.Identity.Name) });
+                _context.AddComment(new Comment { comment = com, PostId = pId, UserId = user.Id });
             }
             //return RedirectToAction("Photo", "Home", new { selected = pId });
         }

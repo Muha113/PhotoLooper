@@ -11,9 +11,9 @@ namespace PhotoLooper.Controllers
 {
     public class UsersController : Controller
     {
-        UserManager<User> _userManager;
+        UserManager<SocialUser> _userManager;
 
-        public UsersController(UserManager<User> userManager)
+        public UsersController(UserManager<SocialUser> userManager)
         {
             _userManager = userManager;
         }
@@ -27,7 +27,7 @@ namespace PhotoLooper.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = new User { Email = model.Email, UserName = model.Email};
+                SocialUser user = new SocialUser { Email = model.Email, UserName = model.Email};
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -46,7 +46,7 @@ namespace PhotoLooper.Controllers
 
         public async Task<IActionResult> Edit(string id)
         {
-            User user = await _userManager.FindByIdAsync(id);
+            SocialUser user = await _userManager.FindByIdAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -60,7 +60,7 @@ namespace PhotoLooper.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _userManager.FindByIdAsync(model.Id);
+                SocialUser user = await _userManager.FindByIdAsync(model.Id);
                 if (user != null)
                 {
                     user.Email = model.Email;
@@ -86,7 +86,7 @@ namespace PhotoLooper.Controllers
         [HttpPost]
         public async Task<ActionResult> Delete(string id)
         {
-            User user = await _userManager.FindByIdAsync(id);
+            SocialUser user = await _userManager.FindByIdAsync(id);
             if (user != null)
             {
                 IdentityResult result = await _userManager.DeleteAsync(user);

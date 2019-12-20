@@ -9,15 +9,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PhotoLooper.Models
 {
-    public class ApplicationContext : IdentityDbContext<User>
+    public class ApplicationContext : IdentityDbContext<SocialUser>
     {
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
-        public DbSet<UserLocal> UsersLocal { get; set; }
         public DbSet<Follower> Followers { get; set; }
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
         {
+
+
             Database.EnsureCreated();
         }
     }

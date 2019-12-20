@@ -16,14 +16,14 @@ namespace PhotoLooper.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<SocialUser> _userManager;
+        private readonly SignInManager<SocialUser> _signInManager;
         private readonly ILogger _logger;
         private readonly IDbService _context;
         private readonly IConfiguration _config;
         private readonly IEmailService _emailService;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IEmailService emailService, ILogger<AccountController> logger, IConfiguration config, IDbService context)
+        public AccountController(UserManager<SocialUser> userManager, SignInManager<SocialUser> signInManager, IEmailService emailService, ILogger<AccountController> logger, IConfiguration config, IDbService context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -44,41 +44,37 @@ namespace PhotoLooper.Controllers
             _logger.LogInformation("\n\n--------------------------------Trying to register\n");
             if (ModelState.IsValid)
             {
-                User user = new User { Email = model.Email, UserName = model.Email };
+                SocialUser user = new SocialUser {
+                    Email = model.Email,
+                    UserName = model.Email,
+                    IsPostSavedLocal = true,
+                    Name = "not set",
+                    Surname = "not set",
+                    Born = DateTime.MinValue,
+                    NickName = model.NickName,
+                    Description = "",
+                    PhoneNumber = "not set",
+                    AvatarPath = "",
+                };
                 // добавляем пользователя
                 var result = await _userManager.CreateAsync(user, model.Password);
                 var res = _userManager.Users.ToList();
                 if (result.Succeeded)
-                {
-                    UserLocal userLocal = new UserLocal
-                    {
-                        UserId = StaticUser.GetUserId(model.Email),
-                        IsPostSavedLocal = true,
-                        Name = "not set",
-                        Surname = "not set",
-                        Born = DateTime.MinValue,
-                        NickName = model.NickName,
-                        Email = model.Email,
-                        Description = "",
-                        Phone = "",
-                        AvatarPath = "",
-                    };
-                    _logger.LogInformation(userLocal.ToString());
-                    _context.CreateUserLocal(userLocal);
+                { 
                     // установка куки
                     await _signInManager.SignInAsync(user, false);
                     // генерация токена для пользователя
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.Action(
-                        "ConfirmEmail",
-                        "Account",
-                        new { userId = user.Id, code = code },
-                        protocol: HttpContext.Request.Scheme);
-                    await _emailService.SendEmailAsync(model.Email, "Confirm your account",
-                        $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>link</a>", _config);
+                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //var callbackUrl = Url.Action(
+                    //    "ConfirmEmail",
+                    //    "Account",
+                    //    new { userId = user.Id, code = code },
+                    //    protocol: HttpContext.Request.Scheme);
+                    //await _emailService.SendEmailAsync(model.Email, "Confirm your account",
+                    //    $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>link</a>", _config);
 
-                    return Content("Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме");
-                    //return RedirectToAction("Index", "Home");
+                    //return Content("Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме");
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {

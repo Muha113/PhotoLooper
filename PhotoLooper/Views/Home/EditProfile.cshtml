@@ -4,7 +4,7 @@
     Layout = null;
 }
 
-@model UserLocal
+@model SocialUser
 
     <form method="post" asp-action="Edit" asp-controller="Home">
         <div class="col-md-8">
@@ -39,7 +39,7 @@
                             <label>Phone</label>
                         </div>
                         <div class="col-md-6">
-                            <input type="text" name="userPhone" value=@Model.Phone>
+                            <input type="text" name="userPhone" value=@Model.PhoneNumber>
                         </div>
                     </div>
                     <div class="row">

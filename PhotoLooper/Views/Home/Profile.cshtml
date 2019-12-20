@@ -183,7 +183,7 @@
                 }
             </div>
         </div>
-        @if (StaticUser.GetUserId(User.Identity.Name) == Model.User.UserId)
+        @if (ViewBag.user.Id == Model.User.Id)
         {
             <form method="post" asp-controller="Home" asp-action="EditProfile" class="col-md-2">
                 <input type="submit" class="profile-edit-btn" name="btnAddMore" value="Edit Profile" />
@@ -194,14 +194,14 @@
             @if (ViewBag.isFollowed)
             {
                 <form method="post" asp-controller="Home" asp-action="Unfollow" class="col-md-2">
-                    <input type="hidden" name="postId" value=@Model.User.UserId />
+                    <input type="hidden" name="postId" value=@Model.User.Id />
                     <input type="submit" class="profile-edit-btn" name="foll" value="Unfollow" />
                 </form>
             }
             else
             {
                 <form method="post" asp-controller="Home" asp-action="Follow" class="col-md-2">
-                    <input type="hidden" name="postId" value=@Model.User.UserId />
+                    <input type="hidden" name="postId" value=@Model.User.Id />
                     <input type="submit" class="profile-edit-btn" name="foll" value="Follow" />
                 </form>
             }
@@ -249,7 +249,7 @@
                                 <p>@Model.User.Born.ToShortDateString()</p>
                             </div>
                         </div>
-                        @if (StaticUser.GetUserId(User.Identity.Name) == Model.User.UserId)
+                        @if (ViewBag.user.Id == Model.User.Id)
                         {
                             <div class="row">
                                 <div class="col-md-6">
@@ -265,7 +265,7 @@
                                 <label>Phone</label>
                             </div>
                             <div class="col-md-6">
-                                <p>@Model.User.Phone</p>
+                                <p>@Model.User.PhoneNumber</p>
                             </div>
                         </div>
                         <div class="row">

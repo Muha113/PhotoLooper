@@ -9,19 +9,19 @@ namespace PhotoLooper.Services
     public interface IDbService
     {
         public void CreatePost(Post post);
-        public List<PostCollector> GetPostsCollector(int id);
-        public void AddFollower(int flr, int flw);
-        public void DeleteFollower(int flr, int flw);
-        public bool isFollwed(int id, int userId);
-        public int GetUserByPostId(int postId);
-        public List<Follower> GetFollowers(int id);
-        public List<Follower> GetFollowings(int id);
+        public List<PostCollector> GetPostsCollector(string id);
+        public void AddFollower(string flr, string flw);
+        public void DeleteFollower(string flr, string flw);
+        public bool isFollwed(string id, string userId);
+        public string GetUserByPostId(int postId);
+        public List<Follower> GetFollowers(string id);
+        public List<Follower> GetFollowings(string id);
         public UserCollector FindUser(string nickname);
         public void AddComment(Comment comment);
-        public void CreateUserLocal(UserLocal userLocal);
-        public void UpdateUser(UserLocal user);
-        public UserCollector GetUserCollector(int id);
-        public int GetPostsAmount(int id);
+        public void CreateUserLocal(SocialUser userLocal);
+        public void UpdateUser(SocialUser user);
+        public UserCollector GetUserCollector(string id);
+        public int GetPostsAmount(string id);
         public List<UserCollector> FindUserByPrefix(string pref);
     }
 }

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PhotoLooper.Models.User>
+﻿@model IEnumerable<PhotoLooper.Models.SocialUser>
 @{
     ViewBag.Title = "Список пользователей";
 }
@@ -9,6 +9,7 @@
     <tr><th>Email</th><th>Год</th><th></th></tr>
     @foreach (var user in Model)
     {
+    @user.NickName
         <tr>
             <td>@user.Email</td>
             <td>

@@ -7,7 +7,7 @@ namespace PhotoLooper.Models
 {
     public class UserCollector
     {
-        public UserLocal User { get; set; }
+        public SocialUser User { get; set; }
         public List<Follower> Followers { get; set; }
         public List<Follower> Following { get; set; }
         public List<PostCollector> Posts { get; set; }

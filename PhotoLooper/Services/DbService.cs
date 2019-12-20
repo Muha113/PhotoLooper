@@ -20,12 +20,12 @@ namespace PhotoLooper.Services
             _context.SaveChanges();
         }
 
-        public int GetPostsAmount(int id)
+        public int GetPostsAmount(string id)
         {
             return _context.Posts.Where(p => p.UserId == id).Count();
         }
 
-        public List<PostCollector> GetPostsCollector(int id)
+        public List<PostCollector> GetPostsCollector(string id)
         {
             Post[] posts = _context.Posts.Where(p => p.UserId == id).ToArray();
             List<PostCollector> resPosts = new List<PostCollector>();
@@ -41,7 +41,7 @@ namespace PhotoLooper.Services
             return resPosts;
         }
 
-        public void AddFollower(int flr, int flw)
+        public void AddFollower(string flr, string flw)
         {
             Follower res = new Follower
             {
@@ -52,31 +52,31 @@ namespace PhotoLooper.Services
             _context.SaveChanges();
         }
 
-        public void DeleteFollower(int flr, int flw)
+        public void DeleteFollower(string flr, string flw)
         {
             _context.Followers.Remove(_context.Followers.Where(i => i.FollowerId == flr && i.FollowingId == flw).ToArray()[0]);
             _context.SaveChanges();
         }
 
-        public bool isFollwed(int id, int userId)
+        public bool isFollwed(string id, string userId)
         {
             List<Follower> fl = _context.Followers.Where(i => i.FollowingId == id && i.FollowerId == userId).ToList();
             return fl.Count != 0;
         }
 
-        public int GetUserByPostId(int postId)
+        public string GetUserByPostId(int postId)
         {
-            int usr = _context.Posts.Where(i => i.Id == postId).ToArray()[0].UserId;
+            string usr = _context.Posts.Where(i => i.Id == postId).ToArray()[0].UserId;
             return usr;
         }
 
-        public List<Follower> GetFollowers(int id)
+        public List<Follower> GetFollowers(string id)
         {
             List<Follower> resFollowers = _context.Followers.Where(p => p.FollowerId == id).ToList();
             return resFollowers;
         }
 
-        public List<Follower> GetFollowings(int id)
+        public List<Follower> GetFollowings(string id)
         {
             List<Follower> resFollowings = _context.Followers.Where(p => p.FollowingId == id).ToList();
             return resFollowings;
@@ -84,7 +84,7 @@ namespace PhotoLooper.Services
 
         public UserCollector FindUser(string nickname)
         {
-            UserLocal[] userLocal = _context.UsersLocal.Where(p => p.NickName == nickname).ToArray();
+            SocialUser[] userLocal = _context.Users.Where(p => p.NickName == nickname).ToArray();
             if (userLocal.Length != 0)
             {
                 UserCollector res = new UserCollector
@@ -101,7 +101,7 @@ namespace PhotoLooper.Services
 
         public List<UserCollector> FindUserByPrefix(string pref)
         {
-            UserLocal[] userLocal = _context.UsersLocal.Where(p => p.NickName.ToLower().StartsWith(pref.ToLower())).ToArray();
+            SocialUser[] userLocal = _context.Users.Where(p => p.NickName.ToLower().StartsWith(pref.ToLower())).ToArray();
             List<UserCollector> result = new List<UserCollector>();
             if (userLocal.Length != 0)
             {
@@ -125,23 +125,23 @@ namespace PhotoLooper.Services
             _context.SaveChanges();
         }
 
-        public void CreateUserLocal(UserLocal userLocal)
+        public void CreateUserLocal(SocialUser userLocal)
         {
-            _context.UsersLocal.Add(userLocal);
+            _context.Users.Add(userLocal);
             _context.SaveChanges();
         }
 
-        public void UpdateUser(UserLocal user)
+        public void UpdateUser(SocialUser user)
         {
-            _context.UsersLocal.Update(user);
+            _context.Users.Update(user);
             _context.SaveChanges();
         }
 
-        public UserCollector GetUserCollector(int id)
+        public UserCollector GetUserCollector(string id)
         {
             UserCollector resultUser = new UserCollector
             {
-                User = _context.UsersLocal.Where(p => p.UserId == id).ToArray()[0],
+                User = _context.Users.Where(p => p.Id == id).ToArray()[0],
                 Posts = GetPostsCollector(id),
                 Followers = GetFollowers(id),
                 Following = GetFollowings(id),

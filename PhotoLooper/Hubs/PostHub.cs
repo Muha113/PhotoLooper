@@ -9,7 +9,7 @@ namespace PhotoLooper.Hubs
 {
     public class PostHub : Hub
     {
-        public async Task Send(string groupname, string post, string nickName, int userId)
+        public async Task Send(string groupname, string post, string nickName, string userId)
         {
             //Console.WriteLine("\n\n\n========================================LOLOLOLOL\n\n\n");
 
