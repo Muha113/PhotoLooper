@@ -68,7 +68,7 @@
                             </button>
                         </div>
                     </div>
-
+                </form>
                     <div class="txt1 text-center p-t-54 p-b-20">
                         <span>
                             Or Sign Up Using
@@ -76,9 +76,12 @@
                     </div>
 
                     <div class="flex-c-m">
-                        <a href="#" class="login100-social-item bg1">
+                        @*<a method="post" asp-controller="Account" asp-action="ExternalLogin" class="login100-social-item bg1">
                             <i class="fa fa-facebook"></i>
-                        </a>
+                        </a>*@
+                        <form method="post" asp-controller="Account" asp-action="ExternalLogin">
+                            <input type="submit" value="F" class="login100-social-item bg1"/>
+                        </form>
 
                         <a href="#" class="login100-social-item bg2">
                             <i class="fa fa-twitter"></i>
@@ -98,7 +101,7 @@
                             Sign Up
                         </a>
                     </div>
-                </form>
+                
             </div>
         </div>
     </div>

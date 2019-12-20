@@ -161,4 +161,5 @@ C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\bin\Debug\netcoreapp3.0\Goog
 C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\bin\Debug\netcoreapp3.0\Google.Apis.Auth.dll
 C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\bin\Debug\netcoreapp3.0\Google.Apis.Core.dll
 C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\bin\Debug\netcoreapp3.0\Google.Apis.Drive.v3.dll
+C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\bin\Debug\netcoreapp3.0\Microsoft.AspNetCore.Authentication.Facebook.dll
 C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\obj\Debug\netcoreapp3.0\PhotoLooper.MvcApplicationPartsAssemblyInfo.cache

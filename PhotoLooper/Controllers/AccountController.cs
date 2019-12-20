@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace PhotoLooper.Controllers
@@ -106,6 +107,63 @@ namespace PhotoLooper.Controllers
                 return RedirectToAction("Index", "Home");
             else
                 return View("Error");
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult ExternalLogin(string provider="Facebook")
+        {
+            var redirectUrl = Url.Action("ExternalLoginCallback", "Account");
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            return new ChallengeResult(provider, properties);
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> ExternalLoginCallback()
+        {
+            var info = await _signInManager.GetExternalLoginInfoAsync();
+            var signInResult = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider,
+                info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+
+            if (signInResult.Succeeded)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+
+                if (email != null)
+                {
+                    var user = await _userManager.FindByEmailAsync(email);
+
+                    if (user == null)
+                    {
+                        user = new SocialUser
+                        {
+                            UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
+                            Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+                            Name = info.Principal.FindFirstValue(ClaimTypes.Name),
+                            Surname = info.Principal.FindFirstValue(ClaimTypes.Surname),
+                            AvatarPath = "",
+                            Born = DateTime.MinValue,
+                            NickName = info.Principal.FindFirstValue(ClaimTypes.GivenName),
+                            IsPostSavedLocal = true,
+                            PhoneNumber = "",
+                            Description = "",
+                            EmailConfirmed = true,
+                        };
+                        await _userManager.CreateAsync(user);
+                    }
+
+                    await _userManager.AddLoginAsync(user, info);
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+
+                    return RedirectToAction("Index", "Home");
+                }
+
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpGet]

@@ -45,6 +45,13 @@ namespace PhotoLooper
                 options.Password.RequireNonAlphanumeric = false;
             }).AddEntityFrameworkStores<ApplicationContext>().AddDefaultTokenProviders();
 
+            services.AddAuthentication()
+                .AddFacebook(options =>
+                {
+                    options.AppId = "766282803838651";
+                    options.AppSecret = "a55d494b372da34c23d78525b1ed40c5";
+                });
+
             services.AddTransient<IDbService, DbService>();
             services.AddTransient<IEmailService, EmailService>();
 
