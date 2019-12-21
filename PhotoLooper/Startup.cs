@@ -57,9 +57,11 @@ namespace PhotoLooper
 
             services.AddTransient<IEmailService, EmailService>();
 
-            //services.AddHostedService<SendStatsBackgroundService>();
+            services.AddHostedService<SendStatsBackgroundService>();
 
-            services.AddMvc(options => options.EnableEndpointRouting = false);
+            services.AddMvc(options => {
+                options.EnableEndpointRouting = false;
+                });
             services.AddControllersWithViews();
             services.AddSignalR();
         }
@@ -75,10 +77,10 @@ namespace PhotoLooper
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseStatusCodePagesWithReExecute("/Error", "?statusCode={0}");
                 app.UseHsts();
             }
+            app.UseStatusCodePagesWithReExecute("/error", "?statusCode={0}");
             app.UseDefaultFiles();
             app.UseHttpsRedirection();
             app.UseStaticFiles();

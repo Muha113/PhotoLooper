@@ -65,17 +65,17 @@ namespace PhotoLooper.Controllers
                     // установка куки
                     await _signInManager.SignInAsync(user, false);
                     // генерация токена для пользователя
-                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    //var callbackUrl = Url.Action(
-                    //    "ConfirmEmail",
-                    //    "Account",
-                    //    new { userId = user.Id, code = code },
-                    //    protocol: HttpContext.Request.Scheme);
-                    //await _emailService.SendEmailAsync(model.Email, "Confirm your account",
-                    //    $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>link</a>", _config);
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var callbackUrl = Url.Action(
+                        "ConfirmEmail",
+                        "Account",
+                        new { userId = user.Id, code = code },
+                        protocol: HttpContext.Request.Scheme);
+                    await _emailService.SendEmailAsync(model.Email, "Confirm your account",
+                        $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>link</a>", _config);
 
-                    //return Content("Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме");
-                    return RedirectToAction("Index", "Home");
+                    return Content("Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме");
+                    //return RedirectToAction("Index", "Home");
                 }
                 else
                 {
@@ -180,7 +180,7 @@ namespace PhotoLooper.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByNameAsync(model.Email);
-               /* if (user != null)
+                if (user != null)
                 {
                     // проверяем, подтвержден ли email
                     if (!await _userManager.IsEmailConfirmedAsync(user))
@@ -188,7 +188,7 @@ namespace PhotoLooper.Controllers
                         ModelState.AddModelError(string.Empty, "Вы не подтвердили свой email");
                         return View(model);
                     }
-                }*/
+                }
 
                 var result =
                     await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe = true, false);

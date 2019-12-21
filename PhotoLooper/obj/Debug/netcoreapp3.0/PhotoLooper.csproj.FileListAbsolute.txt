@@ -164,3 +164,4 @@ C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\bin\Debug\netcoreapp3.0\Goog
 C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\bin\Debug\netcoreapp3.0\Microsoft.AspNetCore.Authentication.Facebook.dll
 C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\obj\Debug\netcoreapp3.0\PhotoLooper.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\obj\Debug\netcoreapp3.0\Razor\Views\Home\Settings.cshtml.g.cs
+C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\obj\Debug\netcoreapp3.0\Razor\Views\Error\Error.cshtml.g.cs
