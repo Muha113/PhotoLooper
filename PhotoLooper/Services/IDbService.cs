@@ -1,4 +1,6 @@
-﻿using PhotoLooper.Models;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
+using PhotoLooper.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,5 +25,8 @@ namespace PhotoLooper.Services
         public UserCollector GetUserCollector(string id);
         public int GetPostsAmount(string id);
         public List<UserCollector> FindUserByPrefix(string pref);
+        public Task<string> UploadImageOnCloudAsync(string imageDataBase64String);
+        public string UploadImageLocalSync(SocialUser user, IFormFile file,
+            Microsoft.AspNetCore.Hosting.IHostingEnvironment _appEnvironment);
     }
 }

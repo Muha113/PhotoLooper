@@ -17,6 +17,7 @@ using System.IO;
 using PhotoLooper.Logger;
 using PhotoLooper.Services;
 using PhotoLooper.Hubs;
+using PhotoLooper.BackgroundServices;
 
 namespace PhotoLooper
 {
@@ -53,7 +54,10 @@ namespace PhotoLooper
                 });
 
             services.AddTransient<IDbService, DbService>();
+
             services.AddTransient<IEmailService, EmailService>();
+
+            //services.AddHostedService<SendStatsBackgroundService>();
 
             services.AddMvc(options => options.EnableEndpointRouting = false);
             services.AddControllersWithViews();

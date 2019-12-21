@@ -1,8 +1,18 @@
-﻿using PhotoLooper.Models;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
+using PhotoLooper.Models;
+using PhotoLooper.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+
 
 namespace PhotoLooper.Services
 {
@@ -147,6 +157,33 @@ namespace PhotoLooper.Services
                 Following = GetFollowings(id),
             };
             return resultUser;
+        }
+
+        public string UploadImageLocalSync(SocialUser user, IFormFile file, Microsoft.AspNetCore.Hosting.IHostingEnvironment _appEnvironment)
+        {
+            string fileName = GetUserCollector(user.Id).User.Id + "file" + GetPostsAmount(user.Id).ToString();
+            string path = "/Files/" + fileName + ".png";
+            using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+            {
+                file.CopyTo(fileStream);
+            }
+            return path;
+        }
+
+        public async Task<string> UploadImageOnCloudAsync(string imageDataBase64String)
+        {
+            byte[] response;
+            using (var client = new WebClient())
+            {
+                string clientID = "3888ec2380d353d";
+                client.Headers.Add("Authorization", "Client-ID " + clientID);
+                var values = new NameValueCollection { { "image", imageDataBase64String } };
+                response = await client.UploadValuesTaskAsync("https://api.imgur.com/3/upload", values);
+            }
+
+            var result = JsonConvert.DeserializeObject<ImgurResponseViewModel>(Encoding.ASCII.GetString(response));
+
+            return result.Data.Link;
         }
     }
 }

@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PhotoLooper.Controllers
 {
@@ -29,7 +30,6 @@ namespace PhotoLooper.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
-            //_logger.LogInformation($"\n\n\n{config["emailhost:email"]}\n\n\n");
             _config = config;
             _context = context;
             _emailService = emailService;
@@ -216,13 +216,7 @@ namespace PhotoLooper.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogOff()
         {
-            //_context.CreatePost(new Post
-            //{
-            //    UserId = StaticUser.Id,
-            //    Path = "dshfsugdfisg",
-            //});
-            // удаляем аутентификационные куки
-            await _signInManager.SignOutAsync();
+           await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
     }

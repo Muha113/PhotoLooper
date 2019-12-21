@@ -1,0 +1,17 @@
+﻿
+@{
+    ViewData["Title"] = "Settings";
+    Layout = "_Layout";
+}
+
+@model SocialUser
+
+<form class="main clearfix" asp-action="OnSelectedSavingType" asp-controller="Home" method="post">
+    <div>
+        <select name="selected">
+            <option>In Cloud</option>
+            <option>On Server</option>
+        </select>
+    </div>
+    <input type="submit" value="Save"/>
+</form>

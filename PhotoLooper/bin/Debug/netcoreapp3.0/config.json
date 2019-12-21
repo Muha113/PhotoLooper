@@ -5,7 +5,7 @@
   },
   "host": {
     "webhost": "smtp.yandex.ru",
-    "port": 25,
-    "useSsl": false
+    "port": "25",
+    "useSsl": "false"
   }
 }

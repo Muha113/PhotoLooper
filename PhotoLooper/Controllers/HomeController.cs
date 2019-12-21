@@ -33,7 +33,6 @@ namespace PhotoLooper.Controllers
         {
             if (!User.Identity.IsAuthenticated)
                 return RedirectToAction("Login", "Account");
-            //Response.StatusCode = 404;
             SocialUser usr = await _userManager.GetUserAsync(User);
             return View(_context.GetUserCollector(usr.Id));
         }
@@ -132,6 +131,12 @@ namespace PhotoLooper.Controllers
             return View(usr);
         }
 
+        public async Task<IActionResult> Settings()
+        {
+            SocialUser user = await _userManager.GetUserAsync(User);
+            return View(user);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Edit(string userName, string userSurname, DateTime userBorn, string userPhone, string userDesc)
         {
@@ -163,14 +168,21 @@ namespace PhotoLooper.Controllers
             }
             return View(usr);
         }
-        
-        //[HttpPost]
-        //public IActionResult SearchUsers(string s)
-        //{
-        //    List<UserCollector> tmp = _context.FindUserByPrefix(s);
-        //    return RedirectToAction(});
-        //}
 
+        public async Task<IActionResult> OnSelectedSavingType(string selected)
+        {
+            SocialUser user = await _userManager.GetUserAsync(User);
+            if (selected == "In Cloud")
+            {
+                user.IsPostSavedLocal = false;
+            }
+            else
+            {
+                user.IsPostSavedLocal = true;
+            }
+            _context.UpdateUser(user);
+            return RedirectToAction("Settings", "Home");
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -184,17 +196,19 @@ namespace PhotoLooper.Controllers
             SocialUser user = await _userManager.GetUserAsync(User);
             if (file != null)
             {
-                // путь к папке Files
-                string fileName = _context.GetUserCollector(user.Id).User.Id + "file" + _context.GetPostsAmount(user.Id).ToString();
-                string path = "/Files/" + fileName + ".png";
-                // сохраняем файл в папку Files в каталоге wwwroot
-                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+                string path;
+                if (user.IsPostSavedLocal)
                 {
-                    file.CopyTo(fileStream);
+                    path = _context.UploadImageLocalSync(user, file, _appEnvironment);
+                }
+                else
+                {
+                    byte[] imageArray = System.IO.File.ReadAllBytes("wwwroot/Files/no_avatar.png");
+                    string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+                    path = await _context.UploadImageOnCloudAsync(base64ImageRepresentation);
                 }
                 _context.CreatePost(new Post { UserId = user.Id, Path = path, DateTime = DateTime.Now });
             }
-
             return RedirectToAction("Index", "Home");
         }
 
@@ -204,10 +218,8 @@ namespace PhotoLooper.Controllers
             SocialUser user = await _userManager.GetUserAsync(User);
             if (com != "")
             {
-                //int tmp = StaticUser.GetUserId(User.Identity.Name);
                 _context.AddComment(new Comment { comment = com, PostId = pId, UserId = user.Id });
             }
-            //return RedirectToAction("Photo", "Home", new { selected = pId });
         }
     }
 }
