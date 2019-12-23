@@ -7,5 +7,14 @@
     "webhost": "smtp.yandex.ru",
     "port": "25",
     "useSsl": "false"
+  },
+  "background": {
+    "email": "daniilmukha@tut.by",
+    "title": "My Title",
+    "subject": "Logs",
+    "message": "Logs for last 2 weeks",
+    "path": "logs.txt",
+    "type": "text",
+    "subtype": "txt"
   }
 }

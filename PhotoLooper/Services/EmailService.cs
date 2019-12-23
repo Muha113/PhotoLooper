@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using MimeKit;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
-
+using System.IO;
 
 namespace PhotoLooper.Services
 {
@@ -18,18 +18,32 @@ namespace PhotoLooper.Services
             _config = config;
         }*/
 
-        public async Task SendEmailAsync(string email, string subject, string message, IConfiguration config)
+        public async Task SendEmailAsync(IConfiguration config, string email, string title, 
+            string subject, string message, string path = null, string type = null, string subType=null)
         {
             var emailMessage = new MimeMessage();
 
-            emailMessage.From.Add(new MailboxAddress("ПроверОЧКА работоспособности моего костыля", "dan4kmuha113@yandex.ru"));
+            emailMessage.From.Add(new MailboxAddress(title, config["emailhost:email"]));
             emailMessage.To.Add(new MailboxAddress("", email));
             emailMessage.Subject = subject;
-            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+            var multipart = new Multipart("mixed");
+            var body = new TextPart(MimeKit.Text.TextFormat.Html)
             {
                 Text = message
             };
-
+            multipart.Add(body);
+            if (path == null)
+            {
+                var attachment = new MimePart(type, subType)
+                {
+                    Content = new MimeContent(File.OpenRead(path)),
+                    ContentDisposition = new ContentDisposition(ContentDisposition.Attachment),
+                    ContentTransferEncoding = ContentEncoding.Base64,
+                    FileName = Path.GetFileName(path)
+                };
+                multipart.Add(attachment);
+            }
+            emailMessage.Body = multipart;
             using (var client = new SmtpClient())
             {
                 await client.ConnectAsync(config["host:webhost"], int.Parse(config["host:port"]), bool.Parse(config["host:useSsl"]));

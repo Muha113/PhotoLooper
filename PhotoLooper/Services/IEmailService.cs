@@ -8,6 +8,7 @@ namespace PhotoLooper.Services
 {
     public interface IEmailService
     {
-        public Task SendEmailAsync(string email, string subject, string message, IConfiguration config);
+        public Task SendEmailAsync(IConfiguration config, string email, string title,
+                    string subject, string message, string path = null, string type = null, string subType = null);   
     }
 }

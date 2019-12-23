@@ -1,4 +1,3 @@
-C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\bin\Debug\netcoreapp3.0\web.config
 C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\bin\Debug\netcoreapp3.0\appsettings.Development.json
 C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\bin\Debug\netcoreapp3.0\appsettings.json
 C:\Users\danii\source\repos\PhotoLooper\PhotoLooper\bin\Debug\netcoreapp3.0\libman.json

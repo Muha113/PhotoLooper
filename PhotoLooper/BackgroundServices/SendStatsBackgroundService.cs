@@ -30,37 +30,12 @@ namespace PhotoLooper.BackgroundServices
             while (true)
             {
                 Console.WriteLine("hi");
-                await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);  
 
-                var emailMessage = new MimeMessage();
+                await _emailService.SendEmailAsync(_config, _config["background:email"], _config["background:title"], 
+                    _config["background:subject"], _config["background:message"],
+                    _config["background:path"], _config["background:type"], _config["background:subtype"]);
 
-                emailMessage.From.Add(new MailboxAddress("", "dan4kmuha113@yandex.ru"));
-                emailMessage.To.Add(new MailboxAddress("", "daniilmukha@tut.by"));
-                emailMessage.Subject = "Administrator";
-                var body = new TextPart(MimeKit.Text.TextFormat.Html)
-                {
-                    Text = "logs for last 2 days)"
-                };
-                var attachment = new MimePart("text", "txt")
-                {
-                    Content = new MimeContent(File.OpenRead("logs.txt")),
-                    ContentDisposition = new ContentDisposition(ContentDisposition.Attachment),
-                    ContentTransferEncoding = ContentEncoding.Base64,
-                    FileName = Path.GetFileName("logs.txt")
-                };
-                var multipart = new Multipart("mixed");
-                multipart.Add(body);
-                multipart.Add(attachment);
-                emailMessage.Body = multipart;
-
-                using (var client = new SmtpClient())
-                {
-                    await client.ConnectAsync("smtp.yandex.ru", 25, false);
-                    await client.AuthenticateAsync("dan4kmuha113@yandex.ru", "5oB26eTCxZ");
-                    //await client.AuthenticateAsync()
-                    await client.SendAsync(emailMessage);
-                    await client.DisconnectAsync(true);
-                }
                 Console.WriteLine("Message sent");
             }
         }
